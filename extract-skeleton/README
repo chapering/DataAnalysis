@@ -1,0 +1,43 @@
+
+============= Extract skeleton fibers ==================
+
+Input: streamline geometry produced from the DTI processing pipeline, in the
+		format of "tubegen .data", which has been clustered by "cad_coloring"
+
+Procedure:
+1. Classify bundles according to the "cad_coloring" using the script
+	
+	sortstlineByColor.py
+
+	* running this script without any arguments will give you the usage, for
+	* deliberate explanation for each options, see the source code inside...
+
+	bundles will be generated into a directory, let us say, $TEMP, and each
+	bundle will be stored still as a standalone geometry file in the same format 
+	as the source, i.e. the "tubegen .data" format.
+
+	An exemplary usage is shown as following command line:
+	./sortstlineByColor.py normal_s1.data 2 5 
+
+2. Interpolate and amalgamate 
+	This is to process each of the bundles produced above iteratively and
+	extract a single streamline as the skeleton of that bundle; Then, all skeletonic
+	streamlines, which are interpolated splines, are congregated into a single file,
+	i.e. the skeletons, as is again stored in the "tubegen .data" format to accord
+	with that of the source
+
+	Use the matlab script to achieve this, and there is also a simpler way to
+	run matlab script:
+	
+	matlabLauncher.py allstlineMedian.m <bundle dir> <number_of_interpolated_points> <target_file>
+
+	An exemplary usage can look like following command line:
+	./matlabLauncher.py allstlineMedian.m $TEMP 100 skeletons.data
+
+Output: as the result of this processing, skeletons.data will be the target
+		skeletonic fibers associated with source geometry normal_s1.data
+
+
+Postscript:
+	*matlabLauncher.py is written by Jadrian Miles, I just copy it here and use
+	*other scripts in this directory are for alternative use, you can ignore them for now

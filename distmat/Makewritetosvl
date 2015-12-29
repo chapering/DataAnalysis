@@ -1,0 +1,60 @@
+#!make
+# -----------------------------------------------------------------------
+#  makefile for bat (linux)
+#
+#  Jian Chen (jchen@cs.brown.edu)
+#
+# ----------------------------------------------------------------------
+#  compiler options
+#  ---------------------------------------------------------------------
+#
+#
+CC = /usr/bin/g++-2.95 -DOPENGL -g 
+
+# include dirs
+MY_G_INCLUDE = /map/gfx0/tools/linux/include
+BAT_WING_SHAPE_DIR=/map/gfx0/tools/linux/src/jchen/BatWingShapeAnalysis
+KINEMATICS_INCLUDE=/map/gfx0/tools/linux/include/Kinematics
+GLUI_DIR=/map/gfx0/tools/linux/src/jchen/publib/glui_v2_2
+
+#lib dirs
+MY_G_LIB = /map/gfx0/tools/linux/lib
+BAT_WING_SHAPE_LIB_DIR=/map/gfx0/tools/linux/src/jchen/BatWingShapeAnalysis/lib
+
+INC = -I/usr/include -I/usr/X11R6/include -I/sw/include -I/usr/local/include -I$(MY_G_INCLUDE)  -I$(BAT_WING_SHAPE_DIR) -I$(KINEMATICS_INCLUDE) -I$(GLUI_DIR)
+
+      #-I$(CJ_SVE_WIDGET_DIR)/src -I$(SVE_DIR)/include \
+      #-I$(CJ_UTIL_DIR)/src
+
+LLIBSDIR =  -L/usr/local/lib -L/usr/X11R6/lib -L/sw/lib -L$(MY_G_LIB)  -L$(BAT_WING_SHAPE_LIB_DIR) -L$(GLUI_DIR)/lib
+
+
+LLIBSLIB= -lMyDir -lSizeMeasure -lBooksteinFile -lBatShapeUtil -lBatWing -lBatColors -lKinematics-d -lglui -lGLw -lGL -lGLU -lglut -lXm -lXt -lXext -lX11 -lm -lstdc++
+
+# ----------------------------------------------------------------------
+# the files for cjSveWidget library 
+#  ---------------------------------------------------------------------
+SOURCES = writetosvl.C
+TARGET =  writetosvl
+
+# ----------------------------------------------------------------------
+# Put all the source together 
+#  ---------------------------------------------------------------------
+OBJECTS	= $(SOURCES:.C=.o)
+
+# ----------------------------------------------------------------------
+#  now build the  library
+#  ---------------------------------------------------------------------
+all: $(TARGET)
+
+writetosvl-d: writetosvl.o
+	$(CC) $(LLIBSDIR) $< $(LLIBSLIB) -o $@
+
+# ----------------------------------------------------------------------
+#  now build the library
+#  ---------------------------------------------------------------------
+writetosvl.o: writetosvl.C
+	$(CC) $(INC) $(CFLAGS) -c  writetosvl.C
+
+clean:
+	rm -f $(TARGET) *.o *~ core
